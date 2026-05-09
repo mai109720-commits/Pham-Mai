@@ -1,0 +1,352 @@
+<link rel="stylesheet" href="/stylesheets/home.css">
+
+<!-- SAFE DATA -->
+<%
+const list = Array.isArray(borrows) ? borrows : [];
+
+const totalBorrow = list
+  .filter(i => i.type === "borrow")
+  .reduce((sum, i) => sum + Number(i.amount || 0), 0);
+
+const totalLend = list
+  .filter(i => i.type === "lend")
+  .reduce((sum, i) => sum + Number(i.amount || 0), 0);
+%>
+
+<!-- HAMBURGER -->
+<button class="hamburger" id="toggleBtn" onclick="toggleSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+<!-- OVERLAY -->
+<div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+<div class="home-container">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+
+    <!-- TOP -->
+    <div>
+
+      <div class="sidebar-top">
+
+        <!-- LOGO -->
+        <div class="logo-box">
+
+          <div class="logo-icon">
+            <i class="fa-solid fa-book"></i>
+          </div>
+
+          <div>
+            <h2>Sổ ghi nợ</h2>
+            <small>Quản lý dễ dàng</small>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- USER -->
+      <div class="user-profile">
+
+        <div class="user-avatar">
+          <%= ((typeof user !== "undefined" && user?.name) || "U")[0].toUpperCase() %>
+        </div>
+
+        <div class="user-info">
+
+          <h3>
+            <%= typeof user !== "undefined"
+              ? user?.name
+              : "Guest"
+            %>
+          </h3>
+
+          <small>
+            <%= typeof user !== "undefined"
+              ? user?.email
+              : "No email"
+            %>
+          </small>
+
+        </div>
+
+      </div>
+
+      <!-- MENU -->
+      <div class="sidebar-menu">
+
+        <a href="/home" class="active">
+          <i class="fa-solid fa-house"></i>
+          <span>Trang chủ</span>
+        </a>
+
+        <a href="/home/history">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Lịch sử</span>
+        </a>
+
+        <!-- STATS -->
+        <div class="sidebar-stats">
+
+          <!-- TOTAL BORROW -->
+          <div class="stat-box">
+
+            <div class="stat-icon borrow-icon">
+              <i class="fa-solid fa-arrow-down"></i>
+            </div>
+
+            <div>
+
+              <small>Tổng mượn</small>
+
+              <h3>
+                <%= totalBorrow.toLocaleString() %>₫
+              </h3>
+
+            </div>
+
+          </div>
+
+          <!-- TOTAL LEND -->
+          <div class="stat-box">
+
+            <div class="stat-icon lend-icon">
+              <i class="fa-solid fa-arrow-up"></i>
+            </div>
+
+            <div>
+
+              <small>Tổng cho vay</small>
+
+              <h3>
+                <%= totalLend.toLocaleString() %>₫
+              </h3>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- LOGOUT -->
+        <a href="/auth/logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Đăng xuất</span>
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="sidebar-bottom">
+
+      <div class="tip-card">
+
+        <div class="tip-icon">🌌</div>
+
+        <h3>Quản lý dễ hơn</h3>
+
+
+      </div>
+
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- TITLE -->
+    <div class="top-title">
+
+      <div>
+        <h1>Quản lý ghi nợ</h1>
+        <div class="title-line"></div>
+      </div>
+
+    </div>
+
+    <!-- FORM -->
+    <div class="card form-card">
+
+      <div class="card-header">
+
+        <div class="card-icon">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+
+        <h3>Thêm khoản mới</h3>
+
+      </div>
+
+      <form action="/home/add" method="POST">
+
+        <!-- PERSON -->
+        <div class="input-group">
+
+          <i class="fa-regular fa-user"></i>
+
+          <input
+            type="text"
+            name="person"
+            placeholder="Tên người"
+            required
+          >
+
+        </div>
+
+        <!-- AMOUNT -->
+        <div class="input-group">
+
+          <i class="fa-solid fa-money-bill-wave"></i>
+
+          <input
+            type="number"
+            name="amount"
+            placeholder="Số tiền"
+            required
+          >
+
+        </div>
+
+        <!-- TYPE -->
+        <div class="input-group">
+
+          <i class="fa-solid fa-tag"></i>
+
+          <select name="type">
+
+            <option value="borrow">
+              Mượn
+            </option>
+
+            <option value="lend">
+              Cho vay
+            </option>
+
+          </select>
+
+        </div>
+
+        <!-- BUTTON -->
+        <button type="submit" class="submit-btn">
+
+          <i class="fa-solid fa-paper-plane"></i>
+
+          Thêm khoản
+
+        </button>
+
+      </form>
+
+    </div>
+
+    <!-- LIST -->
+    <div class="card list-card">
+
+      <div class="card-header">
+
+        <div class="card-icon">
+          <i class="fa-solid fa-list"></i>
+        </div>
+
+        <h3>Danh sách</h3>
+
+      </div>
+
+      <% if (list.length === 0) { %>
+
+        <div class="empty-box">
+
+          <p>Chưa có dữ liệu</p>
+
+        </div>
+
+      <% } %>
+
+      <% list.forEach(item => { %>
+
+        <div class="borrow-item">
+
+          <div class="borrow-left">
+
+            <!-- AVATAR -->
+            <div class="avatar-circle">
+              <%= ((item.person || "?")[0]).toUpperCase() %>
+            </div>
+
+            <!-- INFO -->
+            <div>
+
+              <h4>
+                <%= item.person || "Unknown" %>
+              </h4>
+
+              <small>
+
+                <%= item.type === "borrow"
+                  ? "Đang mượn"
+                  : "Đã cho vay"
+                %>
+
+              </small>
+
+            </div>
+
+          </div>
+
+          <!-- AMOUNT -->
+          <div class="amount">
+
+            <%= Number(item.amount || 0).toLocaleString() %>₫
+
+          </div>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+
+function toggleSidebar() {
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  const overlay =
+    document.getElementById("overlay");
+
+  const btn =
+    document.getElementById("toggleBtn");
+
+  sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
+  btn.classList.toggle("active");
+}
+
+function closeSidebar() {
+
+  document
+    .getElementById("sidebar")
+    .classList.remove("active");
+
+  document
+    .getElementById("overlay")
+    .classList.remove("active");
+
+  document
+    .getElementById("toggleBtn")
+    .classList.remove("active");
+}
+
+</script>
