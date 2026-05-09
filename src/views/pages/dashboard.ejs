@@ -1,0 +1,140 @@
+<link rel="stylesheet" href="/stylesheets/admin.css">
+
+<div class="admin-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="logo">
+      <h2>📒 ADMIN</h2>
+    </div>
+
+    <ul class="menu">
+
+      <li>
+        <a href="/admin/dashboard" class="active">
+          📊 Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="/home">
+          🏠 Trang chủ
+        </a>
+      </li>
+
+      <li>
+        <a href="/auth/logout">
+          🚪 Đăng xuất
+        </a>
+      </li>
+
+    </ul>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Topbar -->
+    <div class="topbar">
+
+      <div>
+        <h1>Dashboard</h1>
+        <p>Xin chào, <strong><%= user.name %></strong></p>
+      </div>
+
+      <div class="avatar">
+        👑
+      </div>
+
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+
+      <div class="card">
+
+        <div class="card-icon">
+          💵
+        </div>
+
+        <div>
+          <h3>Số tiền cho vay</h3>
+          <p>120.000.000đ</p>
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-icon">
+          📉
+        </div>
+
+        <div>
+          <h3>Số tiền đang mượn</h3>
+          <p>45.000.000đ</p>
+        </div>
+
+      </div>
+  
+
+    </div>
+
+    <!-- Table -->
+    <div class="table-box">
+
+      <div class="table-header">
+        <h2>📌 Hoạt động gần đây</h2>
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Tên</th>
+            <th>Hành động</th>
+            <th>Số tiền</th>
+            <th>Thời gian</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Nguyễn Văn A</td>
+            <td>Cho vay</td>
+            <td class="text-success fw-bold">
+              +5.000.000đ
+            </td>
+            <td>5 phút trước</td>
+          </tr>
+
+          <tr>
+            <td>Trần Thị B</td>
+            <td>Trả nợ</td>
+            <td class="text-primary fw-bold">
+              +2.000.000đ
+            </td>
+            <td>20 phút trước</td>
+          </tr>
+
+          <tr>
+            <td>Lê Văn C</td>
+            <td>Mượn tiền</td>
+            <td class="text-danger fw-bold">
+              -7.000.000đ
+            </td>
+            <td>1 giờ trước</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </main>
+
+</div>
